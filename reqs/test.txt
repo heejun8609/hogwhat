@@ -1,0 +1,6 @@
+-r common.txt
+
+django-allauth
+django-rest-auth
+djangorestframework-jwt
+django-imagekit

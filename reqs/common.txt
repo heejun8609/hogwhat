@@ -1,0 +1,10 @@
+uwsgi
+django~=2.0.0
+pillow
+django-cors-headers
+django-extensions
+django-rest-framework
+ipython[notebook]
+mysqlclient
+django-debug-toolbar
+django-rest-swagger

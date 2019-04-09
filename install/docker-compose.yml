@@ -1,0 +1,10 @@
+version: '2'
+services:    
+    hogwhat:
+        container_name: hogwhat
+        build: ./hogwhat  
+        command: uwsgi --ini hogwhat_uwsgi.ini     
+        ports:
+        - "8001:8000"
+        volumes:
+        - /hogwhat:/apisrv

@@ -1,0 +1,12 @@
+
+**/__pycache__/**
+tests.py
+.ipynb_checkpoints
+.vscode
+hogvenv
+migrations/
+*.log
+*.pyc
+/media
+*.ipynb
+*.sh
