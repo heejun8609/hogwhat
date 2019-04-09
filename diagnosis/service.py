@@ -20,7 +20,8 @@ def upload_symptom_data(user, ip, **kwargs):
 
     # 업로드 이미지 있을 경우
     if 'photo' in kwargs:
-        symptom_upload.ds_photo.save('image', File(kwargs['photo']), save=True)
+        photo = kwargs['photo']
+        symptom_upload.ds_photo.save(str(photo), photo, save=True)
         logger.debug('Symptom Process Image Upload')
     
     # 업로드 증상 id 있을 경우

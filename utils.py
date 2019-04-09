@@ -47,7 +47,8 @@ def make_logger(name):
 
 
 def uuid_upload_to(instance, filename):
+    print(filename)
     ym_path = timezone.now().strftime('%Y/%m')
     uuid_name = uuid4().hex
-    extension = os.path.splitext(filename)[-1].lower()
-    return '/'.join([ym_path, uuid_name + extension])
+    ext = os.path.splitext(filename)[-1].lower()
+    return '/'.join([ym_path, uuid_name + ext])

@@ -13,14 +13,10 @@ RUN mkdir -p /apisrv/HogWhat/logs &&\
     chmod 777 -R /apisrv/HogWhat/logs
 
 
-COPY install/uwsgi.service /etc/systemd/system/uwsgi.service
-COPY install/nginx.conf /etc/nginx/nginx.conf
-COPY install/hogwhat_nginx.conf /etc/nginx/sites-available/
+RUN echo "daemon off;" >> /etc/nginx/nginx.conf
+COPY install/hogwhat_nginx.conf /etc/nginx/sites-available/default
 
-RUN rm /etc/nginx/sites-available/default &&\
-    rm /etc/nginx/sites-enabled/default &&\
-    ln -s /etc/nginx/sites-available/hogwhat_nginx.conf /etc/nginx/sites-enabled/
-    # ln install/supervisor.conf /etc/supervisor/conf.d/
+# RUN ln install/supervisor.conf /etc/supervisor/conf.d/
 
 RUN pip3 install --upgrade pip --no-cache-dir -r requirements.txt
 
@@ -29,7 +25,7 @@ EXPOSE 8000
 # CMD ["/usr/bin/supervisord", "-n"]
 
 CMD ["uwsgi", "--socket", "0.0.0.0:8001", \
-              "--wsgi-file", "/apisrv/HogWhat/wsgi.py", \
+              "--wsgi-file", "/apisrv/HogWhat/wsgi_dev.py", \
               "--master", \
               "--die-on-term", \
               "--single-interpreter", \
@@ -41,7 +37,7 @@ CMD ["uwsgi", "--socket", "0.0.0.0:8001", \
 
 
 # CMD ["uwsgi", "--http", "0.0.0.0:8001", \
-#               "--wsgi-file", "/apisrv/HogWhat/wsgi.py", \
+#               "--wsgi-file", "/apisrv/HogWhat/wsgi_dev.py", \
 #               "--master", \
 #               "--die-on-term", \
 #               "--single-interpreter", \
