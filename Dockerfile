@@ -14,7 +14,8 @@ RUN mkdir -p /apisrv/HogWhat/logs &&\
 
 
 RUN echo "daemon off;" >> /etc/nginx/nginx.conf
-COPY install/hogwhat_nginx.conf /etc/nginx/sites-available/default
+COPY install/hogwhat_nginx.conf /etc/nginx/sites-available/
+RUN ln -s /etc/nginx/sites-available/hogwhat_nginx.conf /etc/nginx/sites-enabled/
 
 # RUN ln install/supervisor.conf /etc/supervisor/conf.d/
 

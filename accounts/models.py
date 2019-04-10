@@ -15,8 +15,8 @@ class User(AbstractUser):
 
 class UserInfo(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    animal_cateogry = models.CharField(max_length=60, verbose_name='축종')
+    species = models.CharField(max_length=60, verbose_name='축종')
     area = models.CharField(max_length=60, verbose_name='지역')
-    animal_count = models.CharField(max_length=60, verbose_name='사육두수')
-    phone_number = models.CharField(max_length=60, verbose_name='휴대전화번호', null=True)
+    scale = models.CharField(max_length=60, verbose_name='사육두수')
+    phone = models.CharField(max_length=60, verbose_name='휴대전화번호', null=True)
     created_at = models.DateTimeField(auto_now_add=True)
