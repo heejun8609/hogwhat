@@ -17,19 +17,11 @@ class DiseaseSymptom(APIView):
 
         <p><b>ds_id [STRING/INT]: </b>선택 증상 id</p>
         """
-        # try:
         first_depth_serializer = get_first_depth()
         fd_res = first_depth_serializer.data
         logger.debug('First Depth Symptom List : {}'.format(fd_res))
-        return Response(fd_res, status=status.HTTP_200_OK)
+        return Response(fd_res, status=200)
 
-        # except Exception as e:
-        #     # logger.debug(e)
-        #     # return Response(status.HTTP_500_INTERNAL_SERVER_ERROR)
-        #     exception_msg = str(e.args[0])
-        #     logger.exception(e)
-        #     result = {"error": {"code": 500,"msg": "FAIL"},"data": {'msg': exception_msg}}
-        #     return Response(result)
 
     def post(self, request):
         """
@@ -38,22 +30,17 @@ class DiseaseSymptom(APIView):
 
         <p><b>ds_id [STRING/INT]: </b>선택 증상 id</p>
         """
-        # try:
         data = request.data
         ds_id = str(data.get('ds_id'))
-        next_depth = get_next_depth(ds_id)              
+        next_depth = get_next_depth(ds_id)    
         next_depth_serializer = SymptomModelSerializer(next_depth, many=True)
         nd_res = next_depth_serializer.data
         logger.debug('Next Depth Symtom List : {}'.format(nd_res))
-        return Response(nd_res, status=status.HTTP_200_OK)
-
-        # except Exception as e:
-        #     exception_msg = str(e.args[0])
-        #     logger.exception(e)
-        #     result = {"error": {"code": 500,"msg": "FAIL"},"data": {'msg': exception_msg}}
-        #     return Response(result)
+        return Response(nd_res, status=200)
 
 
+
+      
 class DiseaseTreatment(APIView):
     def get(self, request, ds_id):
         """
@@ -70,7 +57,7 @@ class DiseaseTreatment(APIView):
 
         disease_list = get_final_depth(user=user, ip=ip, ds_id=ds_id)
         logger.debug('Final Depth Disease List : {}'.format(disease_list))
-        return Response(disease_list, status=status.HTTP_200_OK)
+        return Response(disease_list, status=200)
 
 
 class DiseaseTreatmentUpload(APIView):
@@ -82,7 +69,6 @@ class DiseaseTreatmentUpload(APIView):
         <p><b>ds_id [STRING/INT]: </b>선택 증상 id</p>
         <p><b>ds_photo [MULTIPART/FORM-DATA]: </b>(선택) 업로드 사진</p>
         """
-        # try:
         data = request.data
         user = request.user
         
@@ -99,13 +85,7 @@ class DiseaseTreatmentUpload(APIView):
         else:
             disease_list = get_final_depth(user=user, ip=ip, ds_id=ds_id)
         logger.debug('Final Depth Disease List : {}'.format(disease_list))
-        return Response(disease_list, status=status.HTTP_200_OK)
-            
-        # except Exception as e:
-        #     exception_msg = str(e.args[0])
-        #     logger.exception(e)
-        #     result = {"error": {"code": 500,"msg": "FAIL"},"data": {'msg': exception_msg}}
-        #     return Response(result)
+        return Response(disease_list, status=200)
 
     
 class DiseaseSymptomDirect(APIView):
@@ -134,7 +114,7 @@ class DiseaseSymptomDirect(APIView):
         else:
             upload_symptom_data(user=user, ip=ip, desc=desc)
         logger.debug('Direct Symptom Process')
-        return Response(status=status.HTTP_200_OK)
+        return Response(status=200)
 
         # except Exception as e:
         #     exception_msg = str(e.args[0])

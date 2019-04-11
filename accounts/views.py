@@ -37,7 +37,7 @@ class UserInfoView(APIView):
         else:
             upload_user_info(user, ip, species, area, scale)
         logger.debug('User Info Upload')
-        return Response(status=status.HTTP_200_OK)
+        return Response(status=200)
 
         
 # @login_required

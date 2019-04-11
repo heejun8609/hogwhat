@@ -8,12 +8,12 @@ import logging
 from os.path import basename
 from diagnosis.service import upload_symptom_data
 
-
 def get_first_depth():
     symptom_queryset = get_cache('symptom_cache', Symptom.objects.all())
     first_depth = symptom_queryset.filter(ds_id__regex="^[1-9]{1}$")
     first_depth_serializer = SymptomModelSerializer(first_depth, many=True)
     return first_depth_serializer
+
 
 def get_next_depth(ds_id):
     symptom_queryset = get_cache('symptom_cache', Symptom.objects.all())
@@ -21,6 +21,7 @@ def get_next_depth(ds_id):
     filter_Q = Q(ds_id__startswith=ds_id) & Q(ds_id__regex="^[1-9]{%s}$" % (ds_id_length))
     next_depth = symptom_queryset.filter(filter_Q)
     return next_depth
+    
 
 def get_final_depth(user, ip, ds_id, **kwargs):
     symptom_disease_queryset = get_cache('symptom_disease_cache', SymptomDisease.objects.all())
