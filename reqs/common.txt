@@ -7,3 +7,4 @@ ipython[notebook]
 mysqlclient
 django-debug-toolbar
 django-rest-swagger
+django-filter

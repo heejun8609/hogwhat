@@ -8,7 +8,17 @@ from django.core.cache import cache
 from accounts.models import User
 import logging
 from django.conf import settings
+from rest_framework.authtoken.models import Token
+from accounts.serializers import TokenSerializer
 
+def get_user_token(user_name):
+    user, user_created = User.objects.get_or_create(username=user_name)
+    if user_created:
+        user.set_password(user_name)
+        user.save()
+    token, token_created = Token.objects.get_or_create(user=user)
+    token_serializer = TokenSerializer(token)
+    return user, user_created, token_serializer.data
 
 def get_anonymous_permission(user, model, perm):
     content_type = ContentType.objects.get_for_model(model)

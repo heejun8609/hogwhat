@@ -11,3 +11,5 @@ migrations/
 /media
 *.ipynb
 *.sh
+media
+static

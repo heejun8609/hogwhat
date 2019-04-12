@@ -20,14 +20,16 @@ def get_next_depth(ds_id):
     ds_id_length = len(ds_id) + 1
     filter_Q = Q(ds_id__startswith=ds_id) & Q(ds_id__regex="^[1-9]{%s}$" % (ds_id_length))
     next_depth = symptom_queryset.filter(filter_Q)
-    return next_depth
+    next_depth_serializer = SymptomModelSerializer(next_depth, many=True)
+    next_depth_serializer = next_depth_serializer.data
+    return next_depth_serializer
     
 
-def get_final_depth(user, ip, ds_id, **kwargs):
+def get_final_depth(ip, ds_id, **kwargs):
     symptom_disease_queryset = get_cache('symptom_disease_cache', SymptomDisease.objects.all())
     disease_list = []
     final_depth =symptom_disease_queryset.filter(ds_id=ds_id)
-
+    user = User.objects.filter(username=kwargs['user_name'])
     # 질병 정보 가져오기
     for q in final_depth:
         disease_queryset = get_object_or_404(Disease, id=q.ad_name_id)

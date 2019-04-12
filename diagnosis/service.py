@@ -7,15 +7,10 @@ logger = make_logger('UPLOAD')
 
 def upload_symptom_data(user, ip, **kwargs):
     symptom_queryset = get_cache('symptom_cache', Symptom.objects.all())
-    
     # 익명 유저일 경우 모델에 대한 권한 추가
-    user, created = User.objects.get_or_create(username=user)
-    if created:
-        user = get_anonymous_permission(user, SymptomUpload, 'add') # add, delete, change
-        symptom_upload = SymptomUpload(user=user)
-    else:
-        symptom_upload = SymptomUpload(user=user)
-
+    print(user)
+    user, created = User.objects.get_or_create(id=user)
+    symptom_upload = SymptomUpload(user=user)
     symptom_upload.ip = ip
 
     # 업로드 이미지 있을 경우

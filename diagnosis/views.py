@@ -1,10 +1,18 @@
-from .serializers import SymptomModelSerializer
+from .serializers import SymptomUploadModelSerializer, SymptomDiseaseModelSerializer, DiseaseModelSerializer
 from utils import get_cache, make_logger
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
-from .repository import get_first_depth, get_final_depth, get_next_depth
+from .repositories import get_first_depth, get_final_depth, get_next_depth
+from .models import SymptomUpload, SymptomDisease, Disease
 from .service import upload_symptom_data
+from rest_framework.decorators import list_route, detail_route, action
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.viewsets import ModelViewSet
+from django.shortcuts import get_object_or_404
+
+from accounts.models import User
 
 logger = make_logger('DIAGNOSIS_VIEW')
 
@@ -32,9 +40,7 @@ class DiseaseSymptom(APIView):
         """
         data = request.data
         ds_id = str(data.get('ds_id'))
-        next_depth = get_next_depth(ds_id)    
-        next_depth_serializer = SymptomModelSerializer(next_depth, many=True)
-        nd_res = next_depth_serializer.data
+        nd_res = get_next_depth(ds_id)    
         logger.debug('Next Depth Symtom List : {}'.format(nd_res))
         return Response(nd_res, status=200)
 
@@ -50,14 +56,16 @@ class DiseaseTreatment(APIView):
         """
         ip = request.META['REMOTE_ADDR']
         data = request.data
-        user = request.user
         ds_id = str(ds_id)
-        if data.get('user_key'):
-            user = data.get('user_key')
-
-        disease_list = get_final_depth(user=user, ip=ip, ds_id=ds_id)
+        user_name = request.data.get('user_key')
+        disease_list = get_final_depth(user_name=user_name, ip=ip, ds_id=ds_id)
         logger.debug('Final Depth Disease List : {}'.format(disease_list))
         return Response(disease_list, status=200)
+
+
+class DiseaseTreatmentViewSet(ModelViewSet):
+    queryset = SymptomDisease.objects.all()
+
 
 
 class DiseaseTreatmentUpload(APIView):
@@ -70,56 +78,41 @@ class DiseaseTreatmentUpload(APIView):
         <p><b>ds_photo [MULTIPART/FORM-DATA]: </b>(선택) 업로드 사진</p>
         """
         data = request.data
-        user = request.user
-        
+        user_name = data.get('user_key')
         ds_id = str(data.get('ds_id'))
-
-        if data.get('user_key'):
-            user = data.get('user_key')
-
         ip = request.META['REMOTE_ADDR']
 
         if 'ds_photo' in request.FILES:
             photo = data.get('ds_photo')
-            disease_list = get_final_depth(user=user, ip=ip, ds_id=ds_id, photo=photo)
+            disease_list = get_final_depth(user_name=user_name, ip=ip, ds_id=ds_id, photo=photo)
         else:
-            disease_list = get_final_depth(user=user, ip=ip, ds_id=ds_id)
+            disease_list = get_final_depth(user_name=user_name, ip=ip, ds_id=ds_id)
         logger.debug('Final Depth Disease List : {}'.format(disease_list))
         return Response(disease_list, status=200)
 
-    
-class DiseaseSymptomDirect(APIView):
 
-    def post(self, request):
-        """
-        증상에 대한 정보를 서술형으로 받는다.
+class DiseaseSymptomDirectViewSet(ModelViewSet):
+    """
+    증상에 대한 정보를 서술형으로 받는다.
 
-        <p><b>user_key [STRING]: </b>사용자 key</p>
-        <p><b>ds_desc [STRING]: </b>증상 설명</p>
-        <p><b>ds_photo [MULTIPART/FORM-DATA]: </b>(선택) 업로드 사진</p>
-        """
-        # try:
-        data = request.data
-        user = request.user
+    <p><b>ds_desc [STRING]: </b>증상 설명</p>
+    <p><b>ds_photo [MULTIPART/FORM-DATA]: </b>(선택) 업로드 사진</p>
+    """
+    queryset = SymptomUpload.objects.all()
+    serializer_class = SymptomUploadModelSerializer
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
-        if data.get('user_key'):
-            user = data.get('user_key')
+    @detail_route(methods=['post'])
+    def user_name(self, request):
+        user_name = request.data.get('user_key')
+        super().request.user = User.objects.filter(username=user_name)
 
-        ip = request.META['REMOTE_ADDR']
-        desc = data.get('ds_desc')
-        
-        if 'ds_photo' in request.FILES:
-            photo = data.get('ds_photo')
-            upload_symptom_data(user=user, ip=ip, desc=desc, photo=photo)
-        else:
-            upload_symptom_data(user=user, ip=ip, desc=desc)
+    def perform_create(self, serializer):
+        serializer.save(
+            user=self.request.user,
+            ip=self.request.META['REMOTE_ADDR'],
+            ds_description=self.request.data.get('ds_desc'),
+            ds_photo=self.request.data.get('ds_photo'),
+        )
         logger.debug('Direct Symptom Process')
-        return Response(status=200)
-
-        # except Exception as e:
-        #     exception_msg = str(e.args[0])
-        #     logger.exception(e)
-        #     result = {"error": {"code": 500,"msg": "FAIL"},"data": {'msg': exception_msg}}
-        #     return Response(result)
-
-

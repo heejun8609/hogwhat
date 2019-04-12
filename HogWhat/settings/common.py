@@ -16,7 +16,7 @@ import datetime
 from django.urls import reverse_lazy
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = dirname(dirname(abspath(__file__)))
+BASE_DIR = dirname(dirname(dirname(abspath(__file__))))
 
 LOGS_DIR = os.path.join(BASE_DIR, 'logs')
 
@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'rest_framework',
     'rest_framework.authtoken',
+    
     'corsheaders',
     'accounts',
     'diagnosis',
@@ -146,6 +147,7 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
     ),
+    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
     # 'DEFAULT_PERMISSION_CLASSES' : [
     #     'rest_framework.permissions.IsAuthenticated',
     # ],
