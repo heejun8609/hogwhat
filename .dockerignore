@@ -1,4 +1,3 @@
-
 __pycache__
 **/__pycache__/**
 tests.py
@@ -8,8 +7,6 @@ hogvenv
 migrations/
 *.log
 *.pyc
-/media
+media
 *.ipynb
 *.sh
-media
-static

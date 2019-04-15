@@ -7,6 +7,7 @@ from utils import get_cache
 import logging
 from os.path import basename
 from diagnosis.service import upload_symptom_data
+from accounts.models import User
 
 def get_first_depth():
     symptom_queryset = get_cache('symptom_cache', Symptom.objects.all())
@@ -29,7 +30,8 @@ def get_final_depth(ip, ds_id, **kwargs):
     symptom_disease_queryset = get_cache('symptom_disease_cache', SymptomDisease.objects.all())
     disease_list = []
     final_depth =symptom_disease_queryset.filter(ds_id=ds_id)
-    user = User.objects.filter(username=kwargs['user_name'])
+    username = kwargs['user_name']
+    user = User.objects.filter(username=username)
     # 질병 정보 가져오기
     for q in final_depth:
         disease_queryset = get_object_or_404(Disease, id=q.ad_name_id)
@@ -37,8 +39,8 @@ def get_final_depth(ip, ds_id, **kwargs):
         disease_list.append(final_depth_serializer.data)
     
     if 'photo' in kwargs:
-        upload_symptom_data(user=user, ip=ip, photo=kwargs['photo'])
+        upload_symptom_data(username=username, ip=ip, photo=kwargs['photo'])
     else:
-        upload_symptom_data(user=user, ip=ip)
+        upload_symptom_data(username=username, ip=ip)
 
     return disease_list

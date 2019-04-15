@@ -57,7 +57,10 @@ class DiseaseTreatment(APIView):
         ip = request.META['REMOTE_ADDR']
         data = request.data
         ds_id = str(ds_id)
-        user_name = request.data.get('user_key')
+        if request.data.get('user_key'):
+            user_name = request.data.get('user_key')
+        else:
+            user_name = 'aidkr'
         disease_list = get_final_depth(user_name=user_name, ip=ip, ds_id=ds_id)
         logger.debug('Final Depth Disease List : {}'.format(disease_list))
         return Response(disease_list, status=200)
@@ -78,7 +81,10 @@ class DiseaseTreatmentUpload(APIView):
         <p><b>ds_photo [MULTIPART/FORM-DATA]: </b>(선택) 업로드 사진</p>
         """
         data = request.data
-        user_name = data.get('user_key')
+        if data.get('user_key'):
+            user_name = data.get('user_key')
+        else:
+            user_name = 'aidkr'
         ds_id = str(data.get('ds_id'))
         ip = request.META['REMOTE_ADDR']
 

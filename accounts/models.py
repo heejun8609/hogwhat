@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import UserManager as AuthUserManager
 from django.conf import settings
 
+
 class UserManager(AuthUserManager):
     def create_superuser(self, username, email, password, **extra_fields):
         # extra_fields.setdefault('sex', 'm')

@@ -5,11 +5,10 @@ from accounts.models import User
 
 logger = make_logger('UPLOAD')
 
-def upload_symptom_data(user, ip, **kwargs):
+def upload_symptom_data(username, ip, **kwargs):
     symptom_queryset = get_cache('symptom_cache', Symptom.objects.all())
     # 익명 유저일 경우 모델에 대한 권한 추가
-    print(user)
-    user, created = User.objects.get_or_create(id=user)
+    user, created = User.objects.get_or_create(username=username)
     symptom_upload = SymptomUpload(user=user)
     symptom_upload.ip = ip
 
