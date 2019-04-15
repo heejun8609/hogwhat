@@ -21,3 +21,14 @@ class UserInfo(models.Model):
     scale = models.CharField(max_length=60, verbose_name='사육두수')
     phone = models.CharField(max_length=60, verbose_name='휴대전화번호', null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+# class TagRelation(models.Model):
+    # tags = models.CharField(max_length=100, blank=True)
+    # tag_set = models.ManyToManyField('Tag', blank=True)
+
+
+# class Tag(models.Model):
+#     name = models.CharField(max_length=50, unique=True)
+#     def __str__(self):
+#         return self.name
+

@@ -19,7 +19,7 @@ RUN echo "daemon off;" >> /etc/nginx/nginx.conf && \
     ln -s /etc/nginx/sites-available/hogwhat_nginx.conf /etc/nginx/sites-enabled/ && \
     ln install/supervisor.conf /etc/supervisor/conf.d/
 
-RUN pip3 install --upgrade pip --no-cache-dir -r requirements.txt
+RUN pip3 install --upgrade pip --no-cache-dir -r reqs/prod.txt
 
 EXPOSE 8000
 

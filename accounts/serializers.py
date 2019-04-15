@@ -5,8 +5,8 @@ from rest_framework.authtoken.models import Token
 class UserInfoSerializer(ModelSerializer):
     class Meta:
         model = UserInfo
-        fields = '__all__'
-
+        fields = ('species', 'area', 'scale', 'phone')
+        
 class TokenSerializer(ModelSerializer):
     class Meta:
         model = Token
