@@ -1,6 +1,6 @@
 from rest_framework.response import Response
 from rest_framework.viewsets import ReadOnlyModelViewSet
-from rest_framework.decorators import list_route
+from rest_framework.decorators import detail_route
 from .serializers import ThisMonthDiseaseModelSerializer, AtTimesLikeThisModelSerializer
 from .models import ThisMonthDisease, AtTimesLikeThis
 from utils import make_logger
@@ -15,7 +15,11 @@ class ThisMonthDiseaseViewSet(ReadOnlyModelViewSet):
     queryset = ThisMonthDisease.objects.all()
     serializer_class = ThisMonthDiseaseModelSerializer
 
-    @list_route(methods=['get'])
+    def get_queryset(self):
+        qs = super().get_queryset().filter(pk=1)
+        return qs
+
+    @detail_route(methods=['get'])
     def tmd(self, request):
         qs = self.queryset.filter(pk=1)
         serializer = self.get_serializer(qs, many=True)
@@ -30,9 +34,13 @@ class AtTimesLikeThisViewSet(ReadOnlyModelViewSet):
     queryset = AtTimesLikeThis.objects.all()
     serializer_class = AtTimesLikeThisModelSerializer
 
-    @list_route(methods=['get'])
+    def get_queryset(self):
+        qs = super().get_queryset().filter(pk=1)
+        return qs
+
+    @detail_route(methods=['get'])
     def atlt(self, request):
-        qs = self.queryset.filter(pk=1)
+        qs = self.get_queryset()
         serializer = self.get_serializer(qs, many=True)
         logger.debuger("ATLT : ", serializer.data)
         return Response(serializer.data, status=200)

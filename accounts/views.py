@@ -30,7 +30,7 @@ class TokenView(APIView):
 
 class UserInfoViewSet(ModelViewSet):
     """
-    사용자 정보(축종, 지역, 사육두수, 핸드폰 번호)를 받고, 토큰(key)을 반환한다.
+    사용자 정보(축종, 지역, 사육두수, 핸드폰 번호)를 받는다.
 
     <p><b> species [STRING]: </b>축종</p>
     <p><b> area [STRING]: </b>지역</p>
