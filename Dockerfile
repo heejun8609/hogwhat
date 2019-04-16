@@ -3,6 +3,8 @@ FROM ubuntu:16.04
 RUN apt-get update -y &&\
     apt-get install -y build-essential libmysqlclient-dev libpq-dev vim \
                         python3-pip python3-dev python3-setuptools nginx supervisor                         
+
+ENV LANG C.UTF-8
                          
 COPY . /apisrv/
 WORKDIR /apisrv

@@ -9,5 +9,6 @@ migrations/
 *.pyc
 *.ipynb
 *.sh
-static
-media
+*/static
+*/media
+*.jpg

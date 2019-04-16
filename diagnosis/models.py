@@ -34,3 +34,5 @@ class SymptomUpload(models.Model):
     ds_description = models.TextField(blank=True, verbose_name='내용')
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def __unicode__(self):
+        return u'{f}'.format(f=self.ds_photo) 

@@ -14,9 +14,11 @@ import os
 from os.path import join, abspath, dirname
 import datetime
 from django.urls import reverse_lazy
+import sys
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = dirname(dirname(dirname(abspath(__file__))))
+BASE_DIR = dirname(dirname(abspath(__file__)))
 
 LOGS_DIR = os.path.join(BASE_DIR, 'logs')
 
