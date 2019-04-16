@@ -11,7 +11,6 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 from django.shortcuts import get_object_or_404
-
 from accounts.models import User
 
 logger = make_logger('DIAGNOSIS_VIEW')
@@ -73,7 +72,7 @@ class DiseaseTreatmentUpload(APIView):
         if data.get('user_key'):
             user_name = data.get('user_key')
         else:
-            user_name = 'aidkr'
+            user_name = request.user
         ds_id = str(data.get('ds_id'))
         ip = request.META['REMOTE_ADDR']
         disease_list = get_final_depth(ds_id)
@@ -98,15 +97,23 @@ class DiseaseSymptomViewSet(ModelViewSet):
     queryset = SymptomUpload.objects.all()
     serializer_class = SymptomUploadModelSerializer
     authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
-        serializer.save(
-            user=self.request.user,
-            ip=self.request.META['REMOTE_ADDR'],
-            ds_id=Symptom.objects.get(ds_id=self.request.data.get('ds_id')),
-            ds_description=self.request.data.get('ds_desc'),
-            ds_photo=self.request.data.get('ds_photo'),
-        )
+    
+        if self.request.data.get('ds_id'):
+            serializer.save(
+                user=self.request.user,
+                ip=self.request.META['REMOTE_ADDR'],
+                ds_id=Symptom.objects.get(ds_id=self.request.data.get('ds_id')),
+                ds_description=self.request.data.get('ds_desc'),
+                ds_photo=self.request.data.get('ds_photo'),
+            )
+        else:
+            serializer.save(
+                user=self.request.user,
+                ip=self.request.META['REMOTE_ADDR'],
+                ds_description=self.request.data.get('ds_desc'),
+                ds_photo=self.request.data.get('ds_photo'),
+            )
         logger.debug('Direct Symptom Process')
 

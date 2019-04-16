@@ -148,14 +148,9 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.BrowsableAPIRenderer',
     ),
     # 'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
-    # 'DEFAULT_PERMISSION_CLASSES' : [
-    #     'rest_framework.permissions.IsAuthenticated',
-    # ],
     'DEFAULT_AUTHENTICATION_CLASSES' : [
-        'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        # 'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
     ],
     # 'DEFAULT_THROTTLE_CLASSES' : (
 
@@ -173,7 +168,7 @@ REST_FRAMEWORK = {
     # 'JWT_ALLOW_REFRESH' = False,
 # }
 
-# REST_USE_JWT = True
+REST_USE_JWT = True
 
 AUTH_USER_MODEL = 'accounts.User'
 
