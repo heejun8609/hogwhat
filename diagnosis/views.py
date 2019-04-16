@@ -54,7 +54,7 @@ class DiseaseTreatment(APIView):
         ip = request.META['REMOTE_ADDR']
         data = request.data
         ds_id = str(ds_id)
-        disease_list = get_final_depth(ip=ip, ds_id=ds_id)
+        disease_list = get_final_depth(ds_id=ds_id)
         logger.debug('Final Depth Disease List : {}'.format(disease_list))
         return Response(disease_list, status=200)
 
@@ -97,6 +97,7 @@ class DiseaseSymptomViewSet(ModelViewSet):
     queryset = SymptomUpload.objects.all()
     serializer_class = SymptomUploadModelSerializer
     authentication_classes = [TokenAuthentication]
+    http_method_names = ['post']
 
     def perform_create(self, serializer):
     

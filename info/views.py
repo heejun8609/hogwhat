@@ -14,12 +14,13 @@ class ThisMonthDiseaseViewSet(ReadOnlyModelViewSet):
     """
     queryset = ThisMonthDisease.objects.all()
     serializer_class = ThisMonthDiseaseModelSerializer
+    http_method_names = ['get']
 
     def get_queryset(self):
         qs = super().get_queryset().filter(pk=1)
         return qs
 
-    @detail_route(methods=['get'])
+    @detail_route()
     def tmd(self, request):
         qs = self.queryset.filter(pk=1)
         serializer = self.get_serializer(qs, many=True)
@@ -33,12 +34,13 @@ class AtTimesLikeThisViewSet(ReadOnlyModelViewSet):
     """
     queryset = AtTimesLikeThis.objects.all()
     serializer_class = AtTimesLikeThisModelSerializer
+    http_method_names = ['get']
 
     def get_queryset(self):
         qs = super().get_queryset().filter(pk=1)
         return qs
 
-    @detail_route(methods=['get'])
+    @detail_route()
     def atlt(self, request):
         qs = self.get_queryset()
         serializer = self.get_serializer(qs, many=True)
