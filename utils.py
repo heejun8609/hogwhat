@@ -20,6 +20,16 @@ def get_user_token(user_name):
     token_serializer = TokenSerializer(token)
     return user, user_created, token_serializer.data
 
+
+def get_anonymous_permission(user, model, perm):
+    content_type = ContentType.objects.get_for_model(model)
+    model_name = model.__name__.lower()
+    codename = '_'.join([perm, model_name])
+    perm = Permission.objects.get(content_type=content_type, codename=codename)
+    user.user_permissions.add(perm)
+    return user
+
+
 def get_anonymous_permission(user, model, perm):
     content_type = ContentType.objects.get_for_model(model)
     model_name = model.__name__.lower()

@@ -6,31 +6,23 @@ from utils import make_logger, get_user_token
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.decorators import detail_route
 from .service import upload_user_info
 from .serializers import UserInfoSerializer
-from .models import UserInfo
+from .models import UserInfo, User
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 from django.conf import settings
+from django.core.exceptions import ObjectDoesNotExist
+
 
 logger = make_logger('LOGIN_VIEW')
 
 
-class TokenView(APIView):
-    def get(self, request, user_key):
-        """
-        사용자 key를 받고 토큰(key)을 반환한다.
-        <p><b> user_key [STRING]: </b>사용자 key</p>
-        """
-        user, user_created, token = get_user_token(user_key)
-        if token.get('key'):
-            logger.debug('Get Token')
-        return Response(token, status=200)
-
 class UserInfoViewSet(ModelViewSet):
     """
-    사용자 정보(축종, 지역, 사육두수, 핸드폰 번호)를 받는다.
+    [POST] 사용자 정보(축종, 지역, 사육두수, 핸드폰 번호)를 등록한다.
 
     <p><b> species [STRING]: </b>축종</p>
     <p><b> area [STRING]: </b>지역</p>
@@ -52,6 +44,35 @@ class UserInfoViewSet(ModelViewSet):
         )
         logger.debug('User Info Upload')
 
+
+class UserInfoCheckView(APIView):
+    def get(self, request, device_id):
+        """
+        사용자 Device Id를 받고 사용자 정보 등록 여부 확인하여 True, False로 Response를 보낸다.
+        <p><b> device_id [STRING]: </b>사용자 device_id</p>
+        """
+        try:
+            user = User.objects.get(username=device_id).id
+            info_check = UserInfo.objects.filter(user=user).exists()
+            return Response(info_check, status=200)
+        except ObjectDoesNotExist:
+            msg = "Token을 먼저 받으세요"
+            logger.debug(msg)
+            return Response({'result': 'fail', 'msg': msg}, status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+
+class TokenView(APIView):
+    def get(self, request, device_id):
+        """
+        사용자 Device Id 받고 토큰(key)을 반환한다.
+        <p><b> device_id [STRING]: </b>사용자 device_id</p>
+        """
+        User
+        user, user_created, token = get_user_token(device_id)
+        if token.get('key'):
+            logger.debug('Get Token')
+        return Response(token, status=200)
 
 
 # @login_required

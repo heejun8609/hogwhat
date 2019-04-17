@@ -16,4 +16,4 @@ INSTALLED_APPS += [
 MIDDLEWARE = ['debug_toolbar.middleware.DebugToolbarMiddleware'] + MIDDLEWARE
 
 
-INTERNAL_IPS = ['192.168.1.134', '192.168.1.131'] # swagger 접속 ip
+INTERNAL_IPS = ['192.168.1.22', '192.168.1.131'] # swagger 접속 ip

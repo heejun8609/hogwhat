@@ -8,9 +8,10 @@ router.register('user-info', views.UserInfoViewSet)
 
 
 urlpatterns = [
-    path(r'', include(router.urls)),
-    path('token/<user_key>/', views.TokenView.as_view()),
+    path('user-info/<device_id>/', views.UserInfoCheckView.as_view()),
+    path('token/<device_id>/', views.TokenView.as_view()),
     path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
+    path(r'', include(router.urls)),
     # path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     # path('profile/', views.profile, name='profile'),
     # path('rest-auth/kakao/', views.KakaoLogin.as_view(), name='k_login'),

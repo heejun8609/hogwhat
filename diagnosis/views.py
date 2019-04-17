@@ -6,11 +6,9 @@ from rest_framework import status
 from .repositories import get_first_depth, get_final_depth, get_next_depth
 from .models import SymptomUpload, SymptomDisease, Disease, Symptom
 from .service import upload_symptom_data
-from rest_framework.decorators import list_route, detail_route, action
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
-from django.shortcuts import get_object_or_404
 from accounts.models import User
 
 logger = make_logger('DIAGNOSIS_VIEW')
@@ -64,13 +62,13 @@ class DiseaseTreatmentUpload(APIView):
         """
         최종 증상을 선택하면 질병/치료 정보를 가져오고, 사용자가 등록한 데이터를 업로드한다.
 
-        <p><b>user_key [STRING]: </b>사용자 key</p>
+        <p><b>device_id [STRING]: </b>사용자 Device Id</p>
         <p><b>ds_id [STRING/INT]: </b>선택 증상 id</p>
         <p><b>ds_photo [MULTIPART/FORM-DATA]: </b>(선택) 업로드 사진</p>
         """
         data = request.data
-        if data.get('user_key'):
-            user_name = data.get('user_key')
+        if data.get('device_id'):
+            user_name = data.get('device_id')
         else:
             user_name = request.user
         ds_id = str(data.get('ds_id'))

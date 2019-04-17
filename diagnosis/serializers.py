@@ -21,4 +21,4 @@ class SymptomDiseaseModelSerializer(ModelSerializer):
 class SymptomUploadModelSerializer(ModelSerializer):
     class Meta:
         model = SymptomUpload
-        fields = ('ip', 'ds_id', 'ds_description', 'ds_photo')
+        fields = ('ds_id', 'ds_description', 'ds_photo')
