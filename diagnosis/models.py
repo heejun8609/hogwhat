@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from utils import uuid_upload_to
+from django.core.validators import FileExtensionValidator
 
 class Disease(models.Model):
     ad_name = models.CharField(max_length=60)
@@ -30,9 +31,6 @@ class SymptomUpload(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     ip = models.GenericIPAddressField()
     ds_id = models.ForeignKey(Symptom, on_delete=False, verbose_name='증상 ID', null=True)
-    ds_photo = models.ImageField(blank=True, upload_to=uuid_upload_to, verbose_name='사진')
+    ds_photo = models.ImageField(blank=True, upload_to=uuid_upload_to, verbose_name='사진', validators=[FileExtensionValidator()])
     ds_description = models.TextField(blank=True, verbose_name='내용')
     created_at = models.DateTimeField(auto_now_add=True)
-
-    def __unicode__(self):
-        return u'{f}'.format(f=self.ds_photo) 

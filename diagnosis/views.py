@@ -98,7 +98,6 @@ class DiseaseSymptomViewSet(ModelViewSet):
     http_method_names = ['post']
 
     def perform_create(self, serializer):
-    
         if self.request.data.get('ds_id'):
             serializer.save(
                 user=self.request.user,
