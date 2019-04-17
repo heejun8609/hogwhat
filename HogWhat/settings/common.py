@@ -18,7 +18,7 @@ import sys
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = dirname(dirname(abspath(__file__)))
+BASE_DIR = dirname(dirname(dirname(abspath(__file__))))
 
 LOGS_DIR = os.path.join(BASE_DIR, 'logs')
 
@@ -139,7 +139,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = join(BASE_DIR, 'static')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = join(BASE_DIR, 'media')
@@ -154,13 +154,6 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
         # 'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
     ],
-    # 'DEFAULT_THROTTLE_CLASSES' : (
-
-    # ),
-    # 'DEFAULT_THROTTLE_RATES' : {
-    #     'user' : None,
-    #     'anon' : None,
-    # },
 }
 
 # JWT_AUTH = {

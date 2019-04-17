@@ -1,5 +1,7 @@
 FROM ubuntu:16.04
 
+
+
 RUN apt-get update -y &&\
     apt-get install -y build-essential libmysqlclient-dev libpq-dev vim \
                         python3-pip python3-dev python3-setuptools nginx supervisor                         
@@ -22,6 +24,8 @@ RUN echo "daemon off;" >> /etc/nginx/nginx.conf && \
     ln install/supervisor.conf /etc/supervisor/conf.d/
 
 RUN pip3 install --upgrade pip --no-cache-dir -r reqs/prod.txt
+
+RUN python3 manage.py collectstatic --noinput
 
 EXPOSE 8000
 
