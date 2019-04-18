@@ -6,15 +6,13 @@ from utils import make_logger, get_user_token
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.decorators import detail_route
-from .service import upload_user_info
 from .serializers import UserInfoSerializer
 from .models import UserInfo, User
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
+from django.shortcuts import get_object_or_404
 
 
 logger = make_logger('LOGIN_VIEW')
@@ -52,15 +50,13 @@ class UserInfoCheckView(APIView):
         <p><b> device_id [STRING]: </b>사용자 device_id</p>
         """
         try:
-            user = User.objects.get(username=device_id).id
-            info_check = UserInfo.objects.filter(user=user).exists()
-            return Response(info_check, status=200)
-        except ObjectDoesNotExist:
+            user = get_object_or_404(User, username=device_id)
+            is_userinfo = bool(user.userinfo_set.all())
+            return Response(is_userinfo, status=200)
+        except ObjectDoesNotExist as e:
             msg = "Token을 먼저 받으세요"
             logger.debug(msg)
-            return Response({'result': 'fail', 'msg': msg}, status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-
+            return Response({'result': 'fail', 'msg': msg}, status=status.HTTP_404_NOT_FOUND)
 
 class TokenView(APIView):
     def get(self, request, device_id):

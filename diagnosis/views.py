@@ -1,5 +1,5 @@
 from .serializers import SymptomUploadModelSerializer, SymptomDiseaseModelSerializer, DiseaseModelSerializer
-from utils import get_cache, make_logger
+from utils import make_logger
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status

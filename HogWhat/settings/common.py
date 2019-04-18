@@ -163,13 +163,18 @@ REST_FRAMEWORK = {
     # 'JWT_ALLOW_REFRESH' = False,
 # }
 
-REST_USE_JWT = True
+# REST_USE_JWT = True
 
 AUTH_USER_MODEL = 'accounts.User'
 
-LOGIN_URL = reverse_lazy('login')
-LOGIN_REDIRECT_URL = '/accounts/profile/'
-LOGOUT_REDIRECT_URL = None
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = False
+
+# CORS_ORIGIN_WHITELIST = [
+#     '127.0.0.1:8000',
+#     'localhost:8000',
+# ]
+
 
 LOGGING = {
     'version' : 1,
@@ -205,13 +210,9 @@ LOGGING = {
         }
 
 
-CORS_ORIGIN_ALLOW_ALL = True
-CORS_ALLOW_CREDENTIALS = False
-
-# CORS_ORIGIN_WHITELIST = [
-#     '127.0.0.1:8000',
-#     'localhost:8000',
-# ]
+LOGIN_URL = reverse_lazy('login')
+LOGIN_REDIRECT_URL = '/accounts/profile/'
+LOGOUT_REDIRECT_URL = None
 
 # SITE_ID = 1 # 추후 서비스하는 도메인으로 변경
 

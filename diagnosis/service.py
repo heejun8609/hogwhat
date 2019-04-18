@@ -1,12 +1,14 @@
-from utils import get_anonymous_permission, get_cache, make_logger
+from utils import get_anonymous_permission, make_logger
 from django.core.files import File
 from .models import Symptom, SymptomUpload
 from accounts.models import User
+import functools
 
 logger = make_logger('UPLOAD')
 
+@functools.lru_cache()
 def upload_symptom_data(username, ip, ds_id, **kwargs):
-    symptom_queryset = get_cache('symptom_cache', Symptom.objects.all())
+    symptom_queryset = Symptom.objects.all()
     symptom_ds_id = symptom_queryset.get(ds_id=ds_id)
 
     # 익명 유저일 경우 모델에 대한 권한 추가

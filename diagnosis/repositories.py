@@ -3,20 +3,21 @@ from .models import Disease, Symptom, SymptomDisease
 from .serializers import DiseaseModelSerializer, SymptomModelSerializer
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
-from utils import get_cache
 import logging
 from os.path import basename
 from accounts.models import User
+import functools
 
+@functools.lru_cache()
 def get_first_depth():
-    symptom_queryset = get_cache('symptom_cache', Symptom.objects.all())
+    symptom_queryset =  Symptom.objects.all()
     first_depth = symptom_queryset.filter(ds_id__regex="^[1-9]{1}$")
     first_depth_serializer = SymptomModelSerializer(first_depth, many=True)
     return first_depth_serializer
 
-
+@functools.lru_cache()
 def get_next_depth(ds_id):
-    symptom_queryset = get_cache('symptom_cache', Symptom.objects.all())
+    symptom_queryset = Symptom.objects.all()
     ds_id_length = len(ds_id) + 1
     filter_Q = Q(ds_id__startswith=ds_id) & Q(ds_id__regex="^[1-9]{%s}$" % (ds_id_length))
     next_depth = symptom_queryset.filter(filter_Q)
@@ -24,9 +25,9 @@ def get_next_depth(ds_id):
     next_depth_serializer = next_depth_serializer.data
     return next_depth_serializer
     
-
+@functools.lru_cache()
 def get_final_depth(ds_id):
-    symptom_disease_queryset = get_cache('symptom_disease_cache', SymptomDisease.objects.all())
+    symptom_disease_queryset = SymptomDisease.objects.all()
     disease_list = []
     final_depth =symptom_disease_queryset.filter(ds_id=ds_id)
     

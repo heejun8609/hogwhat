@@ -10,7 +10,9 @@ import logging
 from django.conf import settings
 from rest_framework.authtoken.models import Token
 from accounts.serializers import TokenSerializer
+import functools
 
+@functools.lru_cache()
 def get_user_token(user_name):
     user, user_created = User.objects.get_or_create(username=user_name)
     if user_created:
@@ -28,23 +30,6 @@ def get_anonymous_permission(user, model, perm):
     perm = Permission.objects.get(content_type=content_type, codename=codename)
     user.user_permissions.add(perm)
     return user
-
-
-def get_anonymous_permission(user, model, perm):
-    content_type = ContentType.objects.get_for_model(model)
-    model_name = model.__name__.lower()
-    codename = '_'.join([perm, model_name])
-    perm = Permission.objects.get(content_type=content_type, codename=codename)
-    user.user_permissions.add(perm)
-    return user
-
-
-def get_cache(name, data):
-    cache_data = cache.get(name)
-    if cache_data is None:
-        cache.set(name, data)
-        return data
-    return cache_data
 
 
 def make_logger(name):
