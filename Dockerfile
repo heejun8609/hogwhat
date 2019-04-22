@@ -14,10 +14,6 @@ ADD . /apisrv/
 
 ENV PYTHONUNBUFFERED 1
 
-RUN mkdir -p /apisrv/HogWhat/logs &&\
-    chmod 777 -R /apisrv/HogWhat/logs
-
-
 COPY install/hogwhat_nginx.conf /etc/nginx/sites-available/
 RUN echo "daemon off;" >> /etc/nginx/nginx.conf && \
     rm /etc/nginx/sites-enabled/default &&\    
@@ -26,6 +22,6 @@ RUN echo "daemon off;" >> /etc/nginx/nginx.conf && \
 
 RUN pip3 install --upgrade pip --no-cache-dir -r reqs/prod.txt
 
-RUN python3 manage.py collectstatic --noinput
+
 
 EXPOSE 8000
