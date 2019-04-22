@@ -1,15 +1,16 @@
 FROM ubuntu:16.04
 
-
-
 RUN apt-get update -y &&\
     apt-get install -y build-essential libmysqlclient-dev libpq-dev vim \
                         python3-pip python3-dev python3-setuptools nginx supervisor                         
 
 ENV LANG C.UTF-8
                          
-COPY . /apisrv/
+RUN rm -rf apisrv
+RUN mkdir apisrv
 WORKDIR /apisrv
+
+ADD . /apisrv/
 
 ENV PYTHONUNBUFFERED 1
 
@@ -28,5 +29,3 @@ RUN pip3 install --upgrade pip --no-cache-dir -r reqs/prod.txt
 RUN python3 manage.py collectstatic --noinput
 
 EXPOSE 8000
-
-CMD ["/usr/bin/supervisord", "-n"]
