@@ -7,7 +7,7 @@ migrations/
 *.log
 *.pyc
 *.ipynb
-*.sh
+start.sh
 static
 media
 *.jpg
