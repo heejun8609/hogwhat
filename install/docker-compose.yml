@@ -2,8 +2,8 @@ version: '2'
 services:    
     hogwhat_dev:
         container_name: hogwhat_dev
-        build: ..
         command: install/docker-entrypoint.sh
+        entrypoint: /bin/bash
         ports:
         - "8002:8000"
         volumes:
