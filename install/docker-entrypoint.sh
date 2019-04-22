@@ -2,7 +2,6 @@
 echo "Make log dir"
 mkdir -p /apisrv/HogWhat/logs &&\
 chmod 777 -R /apisrv/HogWhat/logs
-chmod 777 -R /apisrv/install
 
 # Collect static files
 python3 manage.py collectstatic --noinput
