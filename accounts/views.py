@@ -13,7 +13,7 @@ from rest_framework.viewsets import ModelViewSet
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404
-
+from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
 logger = make_logger('LOGIN_VIEW')
 
@@ -33,8 +33,9 @@ class UserInfoViewSet(ModelViewSet):
     http_method_names = ['post']
 
     def perform_create(self, serializer):
+        (user, token) = JSONWebTokenAuthentication().authenticate(self.request)
         serializer.save(
-            user=self.request.user,
+            user=user,
             species = self.request.data.get('species'),
             area=self.request.data.get('area'),
             scale=self.request.data.get('scale'),
@@ -58,17 +59,17 @@ class UserInfoCheckView(APIView):
             logger.debug(msg)
             return Response({'result': 'fail', 'msg': msg}, status=status.HTTP_404_NOT_FOUND)
 
-class TokenView(APIView):
-    def get(self, request, device_id):
-        """
-        사용자 Device Id 받고 토큰(key)을 반환한다.
-        <p><b> device_id [STRING]: </b>사용자 device_id</p>
-        """
-        User
-        user, user_created, token = get_user_token(device_id)
-        if token.get('key'):
-            logger.debug('Get Token')
-        return Response(token, status=200)
+# class TokenView(APIView):
+#     def get(self, request, device_id):
+#         """
+#         사용자 Device Id 받고 토큰(key)을 반환한다.
+#         <p><b> device_id [STRING]: </b>사용자 device_id</p>
+#         """
+#         User
+#         user, user_created, token = get_user_token(device_id)
+#         if token.get('key'):
+#             logger.debug('Get Token')
+#         return Response(token, status=200)
 
 
 # @login_required

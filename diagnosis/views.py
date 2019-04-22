@@ -10,6 +10,7 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 from accounts.models import User
+from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
 logger = make_logger('DIAGNOSIS_VIEW')
 
@@ -57,33 +58,6 @@ class DiseaseTreatment(APIView):
         return Response(disease_list, status=200)
 
 
-class DiseaseTreatmentUpload(APIView):
-    def post(self, request):
-        """
-        최종 증상을 선택하면 질병/치료 정보를 가져오고, 사용자가 등록한 데이터를 업로드한다.
-
-        <p><b>device_id [STRING]: </b>사용자 Device Id</p>
-        <p><b>ds_id [STRING/INT]: </b>선택 증상 id</p>
-        <p><b>ds_photo [MULTIPART/FORM-DATA]: </b>(선택) 업로드 사진</p>
-        """
-        data = request.data
-        if data.get('device_id'):
-            user_name = data.get('device_id')
-        else:
-            user_name = request.user
-        ds_id = str(data.get('ds_id'))
-        ip = request.META['REMOTE_ADDR']
-        disease_list = get_final_depth(ds_id)
-        if 'ds_photo' in request.FILES:
-            photo = data.get('ds_photo')
-            upload_symptom_data(username=user_name, ip=ip, ds_id=ds_id, photo=photo)
-            
-        else:
-            upload_symptom_data(username=user_name, ip=ip, ds_id=ds_id)
-        logger.debug('Final Depth Disease List : {}'.format(disease_list))
-        return Response(disease_list, status=200)
-
-
 class DiseaseSymptomViewSet(ModelViewSet):
     """
     사용자가 등록한 증상 데이터를 업로드한다.
@@ -98,20 +72,22 @@ class DiseaseSymptomViewSet(ModelViewSet):
     http_method_names = ['post']
 
     def perform_create(self, serializer):
-        if self.request.data.get('ds_id'):
+        (user, token) = JSONWebTokenAuthentication().authenticate(self.request)
+        if self.request.data.get('ds_desc'):
             serializer.save(
-                user=self.request.user,
+                user=user,
                 ip=self.request.META['REMOTE_ADDR'],
                 ds_id=Symptom.objects.get(ds_id=self.request.data.get('ds_id')),
                 ds_description=self.request.data.get('ds_desc'),
                 ds_photo=self.request.data.get('ds_photo'),
             )
+            logger.debug('Single Disease Symptom Process')
         else:
             serializer.save(
-                user=self.request.user,
+                user=user,
                 ip=self.request.META['REMOTE_ADDR'],
-                ds_description=self.request.data.get('ds_desc'),
+                ds_id=Symptom.objects.get(ds_id=self.request.data.get('ds_id')),           
                 ds_photo=self.request.data.get('ds_photo'),
             )
-        logger.debug('Direct Symptom Process')
+            logger.debug('Direct Disease Symptom Process')
 

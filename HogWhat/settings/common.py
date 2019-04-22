@@ -152,18 +152,18 @@ REST_FRAMEWORK = {
     # 'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
     'DEFAULT_AUTHENTICATION_CLASSES' : [
         'rest_framework.authentication.TokenAuthentication',
-        # 'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
     ],
 }
 
-# JWT_AUTH = {
-#     'JWT_ALLOW_REFRESH' : True,
-#     'JWT_EXPIRATION_DELTA' : datetime.timedelta(seconds=600),
-#     'JWT_REFRESH_EXPIRATION_DELTA' : datetime.timedelta(days=7),
-    # 'JWT_ALLOW_REFRESH' = False,
-# }
+JWT_AUTH = {
+    'JWT_ALLOW_REFRESH' : True,
+    'JWT_EXPIRATION_DELTA' : datetime.timedelta(days=365),
+    'JWT_REFRESH_EXPIRATION_DELTA' : datetime.timedelta(days=365),
+    'JWT_AUTH_HEADER_PREFIX': 'hogwhat',
+}
 
-# REST_USE_JWT = True
+REST_USE_JWT = True
 
 AUTH_USER_MODEL = 'accounts.User'
 

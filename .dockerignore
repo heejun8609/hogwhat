@@ -1,5 +1,4 @@
 __pycache__
-**/__pycache__/**
 tests.py
 .ipynb_checkpoints
 .vscode
@@ -9,6 +8,6 @@ migrations/
 *.pyc
 *.ipynb
 *.sh
-*/static
-*/media
+static
+media
 *.jpg

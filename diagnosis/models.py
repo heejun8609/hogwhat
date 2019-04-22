@@ -32,5 +32,5 @@ class SymptomUpload(models.Model):
     ip = models.GenericIPAddressField()
     ds_id = models.ForeignKey(Symptom, on_delete=False, verbose_name='증상 ID', null=True)
     ds_photo = models.ImageField(blank=True, upload_to=uuid_upload_to, verbose_name='사진', validators=[FileExtensionValidator()])
-    ds_description = models.TextField(blank=True, verbose_name='내용')
-    created_at = models.DateTimeField(auto_now_add=True)
+    ds_description = models.TextField(blank=True, verbose_name='내용', null=True)
+    ds_created_at = models.DateTimeField(auto_now_add=True)
