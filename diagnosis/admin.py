@@ -25,8 +25,8 @@ class SymptomDiseaseAdmin(admin.ModelAdmin):
 
 @admin.register(SymptomUpload)
 class SymptomUploadAdmin(admin.ModelAdmin):
-    list_display = ['user', 'ds_id', 'ip', 'ds_created_at']
-    search_fields = ['ds_id']
+    list_display = ['id', 'user', 'ds_id', 'ip', 'ds_created_at']
+    search_fields = ['user', 'ds_id']
 
 
 @admin.register(SymptomPhoto)
