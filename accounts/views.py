@@ -2,7 +2,7 @@
 # from allauth.socialaccount.providers.kakao.views import KakaoOAuth2Adapter
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from utils import make_logger, get_user_token
+from utils import make_logger, get_jwt_token
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -58,6 +58,17 @@ class UserInfoCheckView(APIView):
             msg = "Token을 먼저 받으세요"
             logger.debug(msg)
             return Response({'result': 'fail', 'msg': msg}, status=status.HTTP_404_NOT_FOUND)
+
+class JWTView(APIView):
+    def get (self, request, device_id):
+        """
+        사용자 Device Id 받고 토큰(key)을 반환한다.
+        <p><b> device_id [STRING]: </b>사용자 device_id</p>
+        """
+        token = get_jwt_token(device_id)
+        logger.debug('Get Token')
+        return Response(token, status=200)
+        
 
 # class TokenView(APIView):
 #     def get(self, request, device_id):

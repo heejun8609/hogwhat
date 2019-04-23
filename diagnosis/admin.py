@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Disease, Symptom, SymptomDisease, SymptomUpload
+from .models import Disease, Symptom, SymptomDisease, SymptomUpload, SymptomPhoto, SymptomDescription
 
 
 @admin.register(Disease)
@@ -25,9 +25,18 @@ class SymptomDiseaseAdmin(admin.ModelAdmin):
 
 @admin.register(SymptomUpload)
 class SymptomUploadAdmin(admin.ModelAdmin):
-    list_display = ['user', 'ds_id', 'ip', 'ds_photo', 'ds_description', 'ds_created_at']
+    list_display = ['user', 'ds_id', 'ip', 'ds_created_at']
     search_fields = ['ds_id']
 
 
+@admin.register(SymptomPhoto)
+class SymptomPhotoAdmin(admin.ModelAdmin):
+    list_display = ['su_id', 'ds_photo']
+    search_fields = ['su_id']
 
+
+@admin.register(SymptomDescription)
+class SymptomDescriptionAdmin(admin.ModelAdmin):
+    list_display = ['su_id', 'ds_description']
+    search_fields = ['su_id']
 
