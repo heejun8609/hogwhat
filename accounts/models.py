@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import UserManager as AuthUserManager
 from django.conf import settings
 
+
 class UserManager(AuthUserManager):
     def create_superuser(self, username, email, password, **extra_fields):
         # extra_fields.setdefault('sex', 'm')
@@ -15,8 +16,19 @@ class User(AbstractUser):
 
 class UserInfo(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    animal_cateogry = models.CharField(max_length=60, verbose_name='축종')
+    species = models.CharField(max_length=60, verbose_name='축종')
     area = models.CharField(max_length=60, verbose_name='지역')
-    animal_count = models.CharField(max_length=60, verbose_name='사육두수')
-    phone_number = models.CharField(max_length=60, verbose_name='휴대전화번호', null=True)
+    scale = models.CharField(max_length=60, verbose_name='사육두수')
+    phone = models.CharField(max_length=60, verbose_name='휴대전화번호', null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+# class TagRelation(models.Model):
+    # tags = models.CharField(max_length=100, blank=True)
+    # tag_set = models.ManyToManyField('Tag', blank=True)
+
+
+# class Tag(models.Model):
+#     name = models.CharField(max_length=50, unique=True)
+#     def __str__(self):
+#         return self.name
+

@@ -1,5 +1,7 @@
 from .common import *
 
+WSGI_APPLICATION = 'HogWhat.wsgi_dev.application'
+
 INSTALLED_APPS += [
     'rest_framework_swagger',
     'debug_toolbar',
@@ -14,4 +16,4 @@ INSTALLED_APPS += [
 MIDDLEWARE = ['debug_toolbar.middleware.DebugToolbarMiddleware'] + MIDDLEWARE
 
 
-INTERNAL_IPS = ['127.0.0.1'] # swagger 접속 ip
+INTERNAL_IPS = ['192.168.1.22', '192.168.1.131'] # swagger 접속 ip

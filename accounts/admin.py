@@ -17,5 +17,5 @@ class UserAdmin(AuthUserAdmin):
 
 @admin.register(UserInfo)
 class UserInfoAdmin(admin.ModelAdmin):
-    list_display = ['user', 'animal_cateogry', 'area', 'animal_count', 'phone_number', 'created_at']
-    search_fields = ['user', 'animal_cateogry', 'area', 'animal_count']
+    list_display = ['user', 'species', 'area', 'scale', 'phone', 'created_at']
+    search_fields = ['user', 'species', 'area', 'scale']

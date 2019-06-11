@@ -14,9 +14,11 @@ import os
 from os.path import join, abspath, dirname
 import datetime
 from django.urls import reverse_lazy
+import sys
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = dirname(dirname(abspath(__file__)))
+BASE_DIR = dirname(dirname(dirname(abspath(__file__))))
 
 LOGS_DIR = os.path.join(BASE_DIR, 'logs')
 
@@ -44,6 +46,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'rest_framework',
     'rest_framework.authtoken',
+    
     'corsheaders',
     'accounts',
     'diagnosis',
@@ -78,8 +81,6 @@ TEMPLATES = [
         },
     },
 ]
-
-WSGI_APPLICATION = 'HogWhat.wsgi.application'
 
 
 # Database
@@ -138,7 +139,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = join(BASE_DIR, 'static')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = join(BASE_DIR, 'media')
@@ -148,35 +149,32 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
     ),
-    # 'DEFAULT_PERMISSION_CLASSES' : [
-    #     'rest_framework.permissions.IsAuthenticated',
-    # ],
-    # 'DEFAULT_AUTHENTICATION_CLASSES' : [
-    #     'rest_framework.authentication.BasicAuthentication',
-    #     'rest_framework.authentication.SessionAuthentication',
-    #     'rest_framework.authentication.TokenAuthentication',
-    #     'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-    # ],
-    'DEFAULT_THROTTLE_CLASSES' : (
-
-    ),
-    'DEFAULT_THROTTLE_RATES' : {
-        'user' : None,
-        'anon' : None,
-    },
+    # 'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
+    'DEFAULT_AUTHENTICATION_CLASSES' : [
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+    ],
 }
 
-# JWT_AUTH = {
-#     'JWT_ALLOW_REFRESH' : True,
-#     'JWT_EXPIRATION_DELTA' : datetime.timedelta(seconds=600),
-#     'JWT_REFRESH_EXPIRATION_DELTA' : datetime.timedelta(days=7),
-# }
+JWT_AUTH = {
+    'JWT_ALLOW_REFRESH' : True,
+    'JWT_EXPIRATION_DELTA' : datetime.timedelta(days=365),
+    'JWT_REFRESH_EXPIRATION_DELTA' : datetime.timedelta(days=365),
+    'JWT_AUTH_HEADER_PREFIX': 'hogwhat',
+}
+
+REST_USE_JWT = True
 
 AUTH_USER_MODEL = 'accounts.User'
 
-LOGIN_URL = reverse_lazy('login')
-LOGIN_REDIRECT_URL = '/accounts/profile/'
-LOGOUT_REDIRECT_URL = None
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = False
+
+# CORS_ORIGIN_WHITELIST = [
+#     '127.0.0.1:8000',
+#     'localhost:8000',
+# ]
+
 
 LOGGING = {
     'version' : 1,
@@ -212,14 +210,9 @@ LOGGING = {
         }
 
 
-CORS_ORIGIN_ALLOW_ALL = True
-CORS_ALLOW_CREDENTIALS = False
-
-# CORS_ORIGIN_WHITELIST = [
-#     '127.0.0.1:8000',
-#     'localhost:8000',
-# ]
+LOGIN_URL = reverse_lazy('login')
+LOGIN_REDIRECT_URL = '/accounts/profile/'
+LOGOUT_REDIRECT_URL = None
 
 # SITE_ID = 1 # 추후 서비스하는 도메인으로 변경
 
-# REST_USE_JWT = True

@@ -2,5 +2,4 @@
 
 django-allauth
 django-rest-auth
-djangorestframework-jwt
 django-imagekit

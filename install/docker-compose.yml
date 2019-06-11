@@ -1,10 +1,12 @@
 version: '2'
 services:    
-    hogwhat:
-        container_name: hogwhat
-        build: ./hogwhat  
-        command: uwsgi --ini hogwhat_uwsgi.ini     
+    hogwhat_dev:
+        container_name: hogwhat_dev
+        command: install/docker-entrypoint.sh
+        entrypoint: /bin/bash
         ports:
-        - "8001:8000"
+        - "8002:8000"
         volumes:
-        - /hogwhat:/apisrv
+        - ..:/apisrv
+        image: heejun8609/hogwhat:latest
+        
